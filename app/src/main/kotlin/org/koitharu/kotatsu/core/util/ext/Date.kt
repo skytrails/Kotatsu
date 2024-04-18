@@ -18,7 +18,6 @@ fun calculateTimeAgo(instant: Instant, showMonths: Boolean = false): DateTimeAgo
 			if (instant.until(Instant.now(), ChronoUnit.MINUTES) < 3) DateTimeAgo.JustNow
 			else DateTimeAgo.Today
 		}
-
 		diffDays == 1L -> DateTimeAgo.Yesterday
 		diffDays < 6 -> DateTimeAgo.DaysAgo(diffDays.toInt())
 		else -> {
@@ -31,5 +30,3 @@ fun calculateTimeAgo(instant: Instant, showMonths: Boolean = false): DateTimeAgo
 		}
 	}
 }
-
-fun Long.toInstantOrNull() = if (this == 0L) null else Instant.ofEpochMilli(this)

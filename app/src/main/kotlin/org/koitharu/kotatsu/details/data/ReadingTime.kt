@@ -19,11 +19,4 @@ data class ReadingTime(
 			resources.getQuantityString(R.plurals.minutes, minutes, minutes),
 		)
 	}
-
-	fun formatShort(resources: Resources): String? = when {
-		hours == 0 && minutes == 0 -> null
-		hours == 0 -> resources.getString(R.string.minutes_short, minutes)
-		minutes == 0 -> resources.getString(R.string.hours_short, hours)
-		else -> resources.getString(R.string.hours_minutes_short, hours, minutes)
-	}
 }

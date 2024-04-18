@@ -61,17 +61,19 @@ import org.koitharu.kotatsu.reader.ui.config.ReaderConfigSheet
 import org.koitharu.kotatsu.reader.ui.pager.ReaderPage
 import org.koitharu.kotatsu.reader.ui.pager.ReaderUiState
 import org.koitharu.kotatsu.reader.ui.tapgrid.TapGridDispatcher
+import org.koitharu.kotatsu.reader.ui.thumbnails.OnPageSelectListener
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ReaderActivity :
 	BaseFullscreenActivity<ActivityReaderBinding>(),
+	ChaptersSheet.OnChapterChangeListener,
 	TapGridDispatcher.OnGridTouchListener,
+	OnPageSelectListener,
 	ReaderConfigSheet.Callback,
 	ReaderControlDelegate.OnInteractionListener,
 	OnApplyWindowInsetsListener,
-	ReaderNavigationCallback,
 	IdlingDetector.Callback,
 	ActivityResultCallback<Uri?>,
 	ZoomControl.ZoomControlListener {
@@ -116,7 +118,7 @@ class ReaderActivity :
 		controlDelegate = ReaderControlDelegate(resources, settings, tapGridSettings, this)
 		viewBinding.slider.setLabelFormatter(PageLabelFormatter())
 		viewBinding.zoomControl.listener = this
-		ReaderSliderListener(viewModel, this).attachToSlider(viewBinding.slider)
+		ReaderSliderListener(this, viewModel).attachToSlider(viewBinding.slider)
 		insetsDelegate.interceptingWindowInsetsListener = this
 		idlingDetector.bindToLifecycle(this)
 
@@ -255,12 +257,11 @@ class ReaderActivity :
 		return controlDelegate.onKeyUp(keyCode, event) || super.onKeyUp(keyCode, event)
 	}
 
-	override fun onChapterSelected(chapter: MangaChapter): Boolean {
+	override fun onChapterChanged(chapter: MangaChapter) {
 		viewModel.switchChapter(chapter.id, 0)
-		return true
 	}
 
-	override fun onPageSelected(page: ReaderPage): Boolean {
+	override fun onPageSelected(page: ReaderPage) {
 		lifecycleScope.launch(Dispatchers.Default) {
 			val pages = viewModel.content.value.pages
 			val index = pages.indexOfFirst { it.chapterId == page.chapterId && it.id == page.id }
@@ -272,7 +273,6 @@ class ReaderActivity :
 				viewModel.switchChapter(page.chapterId, page.index)
 			}
 		}
-		return true
 	}
 
 	override fun onReaderModeChanged(mode: ReaderMode) {

@@ -51,7 +51,7 @@ class FavouriteCategoriesActivity :
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		adapter = CategoriesAdapter(coil, this, this, this)
 		selectionController = ListSelectionController(
-			appCompatDelegate = delegate,
+			activity = this,
 			decoration = CategoriesSelectionDecoration(this),
 			registryOwner = this,
 			callback = CategoriesSelectionCallback(viewBinding.recyclerView, viewModel),

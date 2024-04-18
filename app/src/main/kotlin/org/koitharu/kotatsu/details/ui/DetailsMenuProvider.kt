@@ -20,6 +20,7 @@ import org.koitharu.kotatsu.core.os.AppShortcutManager
 import org.koitharu.kotatsu.core.ui.list.OnListItemClickListener
 import org.koitharu.kotatsu.core.util.ShareHelper
 import org.koitharu.kotatsu.download.ui.dialog.DownloadOption
+import org.koitharu.kotatsu.favourites.ui.categories.select.FavoriteSheet
 import org.koitharu.kotatsu.parsers.model.MangaSource
 import org.koitharu.kotatsu.scrobbling.common.ui.selector.ScrobblingSelectorSheet
 import org.koitharu.kotatsu.search.ui.multi.MultiSearchActivity
@@ -46,6 +47,9 @@ class DetailsMenuProvider(
 		menu.findItem(R.id.action_scrobbling).isVisible = viewModel.isScrobblingAvailable
 		menu.findItem(R.id.action_online).isVisible = viewModel.remoteManga.value != null
 		menu.findItem(R.id.action_stats).isVisible = viewModel.isStatsAvailable.value
+		menu.findItem(R.id.action_favourite).setIcon(
+			if (viewModel.favouriteCategories.value) R.drawable.ic_heart else R.drawable.ic_heart_outline,
+		)
 	}
 
 	override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -58,6 +62,12 @@ class DetailsMenuProvider(
 					} else {
 						shareHelper.shareMangaLink(it)
 					}
+				}
+			}
+
+			R.id.action_favourite -> {
+				viewModel.manga.value?.let {
+					FavoriteSheet.show(activity.supportFragmentManager, it)
 				}
 			}
 

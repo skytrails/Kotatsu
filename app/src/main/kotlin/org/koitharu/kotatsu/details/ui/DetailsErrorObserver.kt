@@ -16,7 +16,7 @@ class DetailsErrorObserver(
 	private val viewModel: DetailsViewModel,
 	resolver: ExceptionResolver?,
 ) : ErrorObserver(
-	activity.viewBinding.scrollView, null, resolver,
+	activity.viewBinding.containerDetails, null, resolver,
 	{ isResolved ->
 		if (isResolved) {
 			viewModel.reload()

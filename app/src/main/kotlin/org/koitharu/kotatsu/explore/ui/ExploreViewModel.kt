@@ -25,12 +25,10 @@ import org.koitharu.kotatsu.explore.domain.ExploreRepository
 import org.koitharu.kotatsu.explore.ui.model.ExploreButtons
 import org.koitharu.kotatsu.explore.ui.model.MangaSourceItem
 import org.koitharu.kotatsu.explore.ui.model.RecommendationsItem
-import org.koitharu.kotatsu.history.data.PROGRESS_NONE
 import org.koitharu.kotatsu.list.ui.model.EmptyHint
 import org.koitharu.kotatsu.list.ui.model.ListHeader
 import org.koitharu.kotatsu.list.ui.model.ListModel
 import org.koitharu.kotatsu.list.ui.model.LoadingState
-import org.koitharu.kotatsu.list.ui.model.MangaListModel
 import org.koitharu.kotatsu.parsers.model.Manga
 import org.koitharu.kotatsu.parsers.model.MangaSource
 import org.koitharu.kotatsu.parsers.util.runCatchingCancellable
@@ -122,16 +120,16 @@ class ExploreViewModel @Inject constructor(
 
 	private fun buildList(
 		sources: List<MangaSource>,
-		recommendation: List<Manga>,
+		recommendation: Manga?,
 		isGrid: Boolean,
 		randomLoading: Boolean,
 		newSources: Set<MangaSource>,
 	): List<ListModel> {
 		val result = ArrayList<ListModel>(sources.size + 3)
 		result += ExploreButtons(randomLoading)
-		if (recommendation.isNotEmpty()) {
-			result += ListHeader(R.string.suggestions, R.string.more, R.id.nav_suggestions)
-			result += RecommendationsItem(recommendation.toRecommendationList())
+		if (recommendation != null) {
+			result += ListHeader(R.string.suggestions)
+			result += RecommendationsItem(recommendation)
 		}
 		if (sources.isNotEmpty()) {
 			result += ListHeader(
@@ -159,29 +157,16 @@ class ExploreViewModel @Inject constructor(
 	private fun getSuggestionFlow() = isSuggestionsEnabled.mapLatest { isEnabled ->
 		if (isEnabled) {
 			runCatchingCancellable {
-				suggestionRepository.getRandomList(SUGGESTIONS_COUNT)
-			}.getOrDefault(emptyList())
+				suggestionRepository.getRandom()
+			}.getOrNull()
 		} else {
-			emptyList()
+			null
 		}
-	}
-
-	private fun List<Manga>.toRecommendationList() = map { manga ->
-		MangaListModel(
-			id = manga.id,
-			title = manga.title,
-			subtitle = manga.tags.joinToString { it.title },
-			coverUrl = manga.coverUrl,
-			manga = manga,
-			counter = 0,
-			progress = PROGRESS_NONE,
-		)
 	}
 
 	companion object {
 
 		private const val TIP_SUGGESTIONS = "suggestions"
-		private const val SUGGESTIONS_COUNT = 8
 		const val TIP_NEW_SOURCES = "new_sources"
 	}
 }

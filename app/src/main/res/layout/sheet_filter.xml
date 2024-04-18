@@ -39,6 +39,7 @@
 
 			<com.google.android.material.card.MaterialCardView
 				android:id="@+id/card_order"
+				style="?m3SpinnerStyle"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginHorizontal="16dp"
@@ -69,6 +70,7 @@
 
 			<com.google.android.material.card.MaterialCardView
 				android:id="@+id/card_locale"
+				style="?m3SpinnerStyle"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginHorizontal="16dp"

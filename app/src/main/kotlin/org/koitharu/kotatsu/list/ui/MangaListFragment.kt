@@ -31,10 +31,8 @@ import org.koitharu.kotatsu.core.ui.list.ListSelectionController
 import org.koitharu.kotatsu.core.ui.list.PaginationScrollListener
 import org.koitharu.kotatsu.core.ui.list.fastscroll.FastScroller
 import org.koitharu.kotatsu.core.ui.util.ReversibleActionObserver
-import org.koitharu.kotatsu.core.ui.widgets.TipView
 import org.koitharu.kotatsu.core.util.ShareHelper
 import org.koitharu.kotatsu.core.util.ext.addMenuProvider
-import org.koitharu.kotatsu.core.util.ext.findAppCompatDelegate
 import org.koitharu.kotatsu.core.util.ext.measureHeight
 import org.koitharu.kotatsu.core.util.ext.observe
 import org.koitharu.kotatsu.core.util.ext.observeEvent
@@ -78,7 +76,7 @@ abstract class MangaListFragment :
 	private var listAdapter: MangaListAdapter? = null
 	private var paginationListener: PaginationScrollListener? = null
 	private var selectionController: ListSelectionController? = null
-	private var spanResolver: GridSpanResolver? = null
+	private var spanResolver: MangaListSpanResolver? = null
 	private val spanSizeLookup = SpanSizeLookup()
 	open val isSwipeRefreshEnabled = true
 
@@ -98,9 +96,9 @@ abstract class MangaListFragment :
 	override fun onViewBindingCreated(binding: FragmentListBinding, savedInstanceState: Bundle?) {
 		super.onViewBindingCreated(binding, savedInstanceState)
 		listAdapter = onCreateAdapter()
-		spanResolver = GridSpanResolver(binding.root.resources)
+		spanResolver = MangaListSpanResolver(binding.root.resources)
 		selectionController = ListSelectionController(
-			appCompatDelegate = checkNotNull(findAppCompatDelegate()),
+			activity = requireActivity(),
 			decoration = MangaSelectionDecoration(binding.root.context),
 			registryOwner = this,
 			callback = this,
@@ -231,10 +229,6 @@ abstract class MangaListFragment :
 	override fun onEmptyActionClick() = Unit
 
 	override fun onListHeaderClick(item: ListHeader, view: View) = Unit
-
-	override fun onPrimaryButtonClick(tipView: TipView) = Unit
-
-	override fun onSecondaryButtonClick(tipView: TipView) = Unit
 
 	override fun onRetryClick(error: Throwable) {
 		resolveException(error)

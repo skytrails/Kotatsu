@@ -31,15 +31,10 @@ import android.webkit.WebView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.IntegerRes
 import androidx.annotation.WorkerThread
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.app.AppCompatDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.os.LocaleListCompat
-import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
 import androidx.work.CoroutineWorker
@@ -141,7 +136,7 @@ fun Window.setNavigationBarTransparentCompat(context: Context, elevation: Float,
 	} else {
 		// Set navbar scrim 70% of navigationBarColor
 		ElevationOverlayProvider(context).compositeOverlayIfNeeded(
-			context.getThemeColor(com.google.android.material.R.attr.colorSurfaceContainer, alphaFactor),
+			context.getThemeColor(R.attr.m3ColorBottomMenuBackground, alphaFactor),
 			elevation,
 		)
 	}
@@ -219,13 +214,6 @@ fun Context.findActivity(): Activity? = when (this) {
 	is Activity -> this
 	is ContextWrapper -> baseContext.findActivity()
 	else -> null
-}
-
-fun Fragment.findAppCompatDelegate(): AppCompatDelegate? {
-	((this as? DialogFragment)?.dialog as? AppCompatDialog)?.run {
-		return delegate
-	}
-	return parentFragment?.findAppCompatDelegate() ?: (activity as? AppCompatActivity)?.delegate
 }
 
 fun Context.checkNotificationPermission(channelId: String?): Boolean {

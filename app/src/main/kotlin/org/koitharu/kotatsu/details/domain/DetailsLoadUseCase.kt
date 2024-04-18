@@ -54,8 +54,7 @@ class DetailsLoadUseCase @Inject constructor(
 		} catch (e: IOException) {
 			local?.await()?.manga?.also { localManga ->
 				send(MangaDetails(localManga, null, localManga.description?.parseAsHtml(withImages = false), true))
-			}
-			throw e
+			} ?: throw e
 		}
 	}
 

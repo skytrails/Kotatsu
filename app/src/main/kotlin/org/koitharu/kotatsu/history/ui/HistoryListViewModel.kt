@@ -198,7 +198,6 @@ class HistoryListViewModel @Inject constructor(
 		ListSortOrder.ALPHABETIC_REVERSE,
 		ListSortOrder.RELEVANCE,
 		ListSortOrder.NEW_CHAPTERS,
-		ListSortOrder.UPDATED,
 		ListSortOrder.RATING -> null
 	}
 }

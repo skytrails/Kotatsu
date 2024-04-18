@@ -111,11 +111,7 @@ class ExploreFragment :
 	}
 
 	override fun onListHeaderClick(item: ListHeader, view: View) {
-		if (item.payload == R.id.nav_suggestions) {
-			startActivity(SuggestionsActivity.newIntent(view.context))
-		} else {
-			startActivity(Intent(view.context, SourcesCatalogActivity::class.java))
-		}
+		startActivity(Intent(view.context, SourcesCatalogActivity::class.java))
 	}
 
 	override fun onPrimaryButtonClick(tipView: TipView) {

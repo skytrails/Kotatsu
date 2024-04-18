@@ -1,9 +1,10 @@
 package org.koitharu.kotatsu.core.ui.list
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ActionMode
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -19,7 +20,7 @@ private const val KEY_SELECTION = "selection"
 private const val PROVIDER_NAME = "selection_decoration"
 
 class ListSelectionController(
-	private val appCompatDelegate: AppCompatDelegate,
+	private val activity: Activity,
 	private val decoration: AbstractSelectionItemDecoration,
 	private val registryOwner: SavedStateRegistryOwner,
 	private val callback: Callback2,
@@ -107,7 +108,7 @@ class ListSelectionController(
 
 	private fun startActionMode() {
 		if (actionMode == null) {
-			actionMode = appCompatDelegate.startSupportActionMode(this)
+			actionMode = (activity as? AppCompatActivity)?.startSupportActionMode(this)
 		}
 	}
 

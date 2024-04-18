@@ -1,8 +1,6 @@
 package org.koitharu.kotatsu.core.ui
 
 import android.content.Intent
-import androidx.annotation.AnyThread
-import androidx.annotation.WorkerThread
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -41,10 +39,8 @@ abstract class CoroutineIntentService : BaseService() {
 		}
 	}
 
-	@WorkerThread
 	protected abstract suspend fun processIntent(startId: Int, intent: Intent)
 
-	@AnyThread
 	protected abstract fun onError(startId: Int, error: Throwable)
 
 	private fun errorHandler(startId: Int) = CoroutineExceptionHandler { _, throwable ->
